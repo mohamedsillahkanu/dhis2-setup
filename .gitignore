@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+*.log
+logs/
+*.tmp
+tmp/
+temp/

@@ -1,7 +1,7 @@
 databases:
-  - name: dhis2-dev-db
-    databaseName: dhis2_dev
-    user: dhis2_dev_user
+  - name: icf
+    databaseName: icf
+    user: icf_user
     plan: Basic-2gb
     diskSizeGB: 10
     region: oregon
@@ -9,7 +9,7 @@ databases:
 
 services:
   - type: web
-    name: dhis2-dev
+    name: icf
     runtime: docker
     plan: standard
     region: oregon
@@ -17,17 +17,17 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: dhis2-dev-db
+          name: icf
           property: connectionString
       - key: DB_USERNAME
         fromDatabase:
-          name: dhis2-dev-db
+          name: icf
           property: user
       - key: DB_PASSWORD
         fromDatabase:
-          name: dhis2-dev-db
+          name: icf
           property: password
       - key: SERVER_URL
-        value: https://dhis2-dev.onrender.com
+        value: https://icf.onrender.com
       - key: ENCRYPTION_PASSWORD
         generateValue: true
