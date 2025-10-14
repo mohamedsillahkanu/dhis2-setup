@@ -2,7 +2,7 @@ databases:
   - name: icf
     databaseName: icf
     user: icf_user
-    plan: standard
+    plan: Basic-2gb
     diskSizeGB: 10
     region: oregon
     postgresMajorVersion: 15
