@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHIS2 One-Click Deploy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #a0aec0;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .step-hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(100, 116, 139, 0.5);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-hint {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+
+        .btn {
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            padding: 14px 20px;
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .config-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .info-box.success {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: rgba(34, 197, 94, 0.4);
+        }
+
+        .info-box.warning {
+            background: rgba(234, 179, 8, 0.15);
+            border-color: rgba(234, 179, 8, 0.4);
+        }
+
+        .url-display {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+            border: 2px solid rgba(34, 197, 94, 0.5);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .url-display h3 {
+            color: #22c55e;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .url-text {
+            font-size: 1.5rem;
+            color: #3b82f6;
+            font-weight: 600;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 1s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .success-message h2 {
+            color: #22c55e;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .success-message p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .credentials {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .credentials h4 {
+            color: #fbbf24;
+            margin-bottom: 15px;
+        }
+
+        .cred-item {
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .cred-label {
+            color: #94a3b8;
+            display: inline-block;
+            width: 120px;
+        }
+
+        .cred-value {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">⚕️</div>
+            <h1>DHIS2 Instant Deploy</h1>
+            <p>Deploy to Render in 60 seconds • No Setup Required</p>
+        </div>
+
+        <!-- Step 1: Setup Form -->
+        <div id="step-setup" class="card">
+            <h2 style="margin-bottom: 30px; text-align: center;">Name Your Instance</h2>
+
+            <div class="form-group">
+                <label class="form-label">Application Name</label>
+                <input 
+                    type="text" 
+                    id="app-name" 
+                    class="form-input" 
+                    placeholder="my-dhis2-app" 
+                    value="dhis2-health"
+                    oninput="updateUrl()"
+                >
+                <p class="form-hint">Choose a unique name for your DHIS2 instance</p>
+            </div>
+
+            <div class="url-display">
+                <h3>🌐 Your DHIS2 URL will be:</h3>
+                <div class="url-text" id="app-url">https://dhis2-health.onrender.com</div>
+            </div>
+
+            <div class="info-box">
+                <p style="font-size: 0.95rem; color: #cbd5e1; line-height: 1.8;">
+                    <strong>✨ What happens next:</strong><br>
+                    1️⃣ We'll auto-generate your secure configuration<br>
+                    2️⃣ You'll copy it and paste it in Render<br>
+                    3️⃣ Wait ~10 minutes for deployment<br>
+                    4️⃣ Your DHIS2 is ready to use!
+                </p>
+            </div>
+
+            <button class="btn btn-primary" onclick="generateConfig()" style="margin-top: 20px;">
+                🚀 Generate Configuration
+            </button>
+        </div>
+
+        <!-- Step 2: Configuration Ready -->
+        <div id="step-config" class="card step-hidden">
+            <h2 style="margin-bottom: 30px; text-align: center;">✅ Configuration Ready!</h2>
+
+            <div class="config-box">
+                <h3 style="color: #3b82f6; margin-bottom: 20px;">📋 Your dhis.conf</h3>
+                <textarea 
+                    id="dhis-conf" 
+                    readonly
+                    onclick="this.select(); copyToClipboard(this.value)"
+                    style="width: 100%; height: 250px; background: rgba(0,0,0,0.3); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 15px; color: #e2e8f0; font-family: 'Courier New', monospace; font-size: 0.85rem; resize: vertical; cursor: pointer;"
+                ></textarea>
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 10px; text-align: center;">
+                    👆 Click to select all and copy
+                </p>
+            </div>
+
+            <div class="url-display">
+                <h3>🌐 Your DHIS2 URL</h3>
+                <div class="url-text" id="final-url"></div>
+            </div>
+
+            <div class="info-box warning">
+                <h4 style="margin-bottom: 10px; color: #fbbf24;">📝 Deployment Instructions</h4>
+                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 2; font-size: 0.95rem;">
+                    <li>Click the "Deploy to Render" button below</li>
+                    <li>Sign up/Login to Render (free, no credit card)</li>
+                    <li>Choose "Web Service" → "Deploy from Docker Image"</li>
+                    <li>Docker Image: <code style="background: rgba(59, 130, 246, 0.2); padding: 2px 8px; border-radius: 4px;">dhis2/core:2.40.5</code></li>
+                    <li>Service Name: Use your app name from above</li>
+                    <li>Region: Any (Oregon recommended)</li>
+                    <li>Plan: Select <strong>Free</strong></li>
+                    <li>Add Environment Variable: <code>DHIS2_HOME</code> = <code>/opt/dhis2</code></li>
+                    <li>Create a file disk at <code>/opt/dhis2</code></li>
+                    <li>Upload your dhis.conf (copied above) to that disk</li>
+                    <li>Click "Create Web Service"</li>
+                </ol>
+            </div>
+
+            <button class="btn btn-primary" onclick="openRender()" style="margin-bottom: 15px;">
+                🚀 Deploy to Render Now
+            </button>
+
+            <button class="btn btn-secondary" onclick="downloadDhisConf()" style="margin-bottom: 30px;">
+                📥 Download dhis.conf
+            </button>
+
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="showSuccess()" style="background: linear-gradient(135deg, #22c55e 0%, #10b981 100%); width: auto; display: inline-flex;">
+                    ✅ I've Deployed - Show Me Next Steps
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Success -->
+        <div id="step-success" class="card step-hidden">
+            <div class="success-message">
+                <div class="success-icon">🎉</div>
+                <h2>Deployment Successful!</h2>
+                <p>Your DHIS2 instance is being created...</p>
+            </div>
+
+            <div class="url-display">
+                <h3>🌐 Access Your DHIS2</h3>
+                <div class="url-text" id="success-url"></div>
+            </div>
+
+            <div class="credentials">
+                <h4>🔐 Default Login Credentials</h4>
+                <div class="cred-item">
+                    <span class="cred-label">Username:</span>
+                    <span class="cred-value">admin</span>
+                </div>
+                <div class="cred-item">
+                    <span class="cred-label">Password:</span>
+                    <span class="cred-value">district</span>
+                </div>
+            </div>
+
+            <div class="info-box warning">
+                <h4 style="margin-bottom: 10px; color: #fbbf24;">⚠️ Important Next Steps</h4>
+                <ol style="color: #cbd5e1; padding-left: 20px; line-height: 2; font-size: 0.95rem;">
+                    <li><strong>Wait 10-15 minutes</strong> for the deployment to complete ☕</li>
+                    <li>Click the button below to access your DHIS2</li>
+                    <li><strong>Change the admin password immediately!</strong></li>
+                    <li>Configure your health system data</li>
+                </ol>
+            </div>
+
+            <div class="info-box">
+                <h4 style="margin-bottom: 10px; color: #3b82f6;">💡 Free Tier Information</h4>
+                <ul style="color: #cbd5e1; padding-left: 20px; line-height: 1.8; font-size: 0.9rem;">
+                    <li>Your instance will spin down after 15 minutes of inactivity</li>
+                    <li>First request after spin-down takes 30-60 seconds to wake up</li>
+                    <li>Data is always preserved</li>
+                    <li>Upgrade to paid plan for 24/7 availability</li>
+                </ul>
+            </div>
+
+            <button class="btn btn-primary" onclick="openDhis2()" style="margin-bottom: 15px; font-size: 1.2rem; padding: 18px;">
+                🚀 Access DHIS2 Now
+            </button>
+
+            <button class="btn btn-secondary" onclick="window.location.reload()">
+                ← Deploy Another Instance
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let config = {
+            appName: 'dhis2-health',
+            dbPassword: '',
+            encryptionKey: '',
+            appUrl: ''
+        };
+
+        // Initialize
+        function init() {
+            // Auto-generate secure keys in background
+            config.dbPassword = generateSecureKey();
+            config.encryptionKey = generateSecureKey();
+            updateUrl();
+        }
+
+        // Generate secure key (not shown to user)
+        function generateSecureKey() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*_-';
+            let key = '';
+            for (let i = 0; i < 32; i++) {
+                key += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return key;
+        }
+
+        // Update URL preview
+        function updateUrl() {
+            const appName = document.getElementById('app-name').value.toLowerCase().replace(/[^a-z0-9-]/g, '-') || 'dhis2-health';
+            const url = `https://${appName}.onrender.com`;
+            document.getElementById('app-url').textContent = url;
+            config.appUrl = url;
+        }
+
+        // Generate configuration
+        function generateConfig() {
+            config.appName = document.getElementById('app-name').value.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+
+            if (!config.appName) {
+                alert('Please enter an application name!');
+                return;
+            }
+
+            // Generate dhis.conf with auto-generated keys
+            const dhisConf = `# Database Configuration
+connection.dialect = org.hibernate.dialect.PostgreSQLDialect
+connection.driver_class = org.postgresql.Driver
+connection.url = jdbc:postgresql://postgres:5432/dhis2
+connection.username = dhis
+connection.password = ${config.dbPassword}
+
+# Server Configuration
+server.base.url = ${config.appUrl}
+server.https = on
+
+# File Storage
+filestore.provider = filesystem
+filestore.container = /opt/dhis2/files
+
+# Security
+encryption.password = ${config.encryptionKey}
+
+# System Settings
+system.read_only_mode = off
+system.session.timeout = 3600`;
+
+            document.getElementById('dhis-conf').value = dhisConf;
+            document.getElementById('final-url').textContent = config.appUrl;
+
+            // Show config step
+            document.getElementById('step-setup').classList.add('step-hidden');
+            document.getElementById('step-config').classList.remove('step-hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Open Render
+        function openRender() {
+            window.open('https://dashboard.render.com/select-repo?type=web', '_blank');
+            showToast('Opening Render Dashboard...');
+        }
+
+        // Download dhis.conf
+        function downloadDhisConf() {
+            const content = document.getElementById('dhis-conf').value;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dhis.conf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('✅ dhis.conf downloaded!');
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('✅ Copied to clipboard!');
+            });
+        }
+
+        // Show success screen
+        function showSuccess() {
+            document.getElementById('success-url').textContent = config.appUrl;
+            document.getElementById('step-config').classList.add('step-hidden');
+            document.getElementById('step-success').classList.remove('step-hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Open DHIS2
+        function openDhis2() {
+            window.open(config.appUrl, '_blank');
+            showToast('🚀 Opening your DHIS2 instance...');
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                z-index: 10000;
+                font-weight: 500;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
