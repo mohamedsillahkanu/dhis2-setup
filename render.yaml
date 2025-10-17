@@ -44,4 +44,3 @@ databases:
     user: ${DB_USER}
     plan: starter
     region: oregon
-    postgresMajorVersion: "15"
