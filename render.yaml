@@ -1,36 +1,36 @@
 services:
   - type: web
-    name: ahadi
+    name: ${APP_NAME}
     runtime: docker
     dockerfilePath: ./Dockerfile
-    plan: standard
-    region: oregon
+    plan: ${SERVICE_PLAN}
+    region: ${REGION}
     autoDeploy: true
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: ahadi-db
+          name: ${APP_NAME}-db
           property: connectionString
       - key: DB_HOST
         fromDatabase:
-          name: ahadi-db
+          name: ${APP_NAME}-db
           property: host
       - key: DB_PORT
-        value: "5432"
+        value: 5432
       - key: DB_NAME
         fromDatabase:
-          name: ahadi-db
+          name: ${APP_NAME}-db
           property: databaseName
       - key: DB_USERNAME
         fromDatabase:
-          name: ahadi-db
+          name: ${APP_NAME}-db
           property: user
       - key: DB_PASSWORD
         fromDatabase:
-          name: ahadi-db
+          name: ${APP_NAME}-db
           property: password
       - key: SERVER_URL
-        value: https://ahadi.onrender.com
+        value: https://${APP_NAME}.onrender.com
       - key: ENCRYPTION_PASSWORD
         generateValue: true
       - key: FILESTORE_PROVIDER
@@ -39,8 +39,9 @@ services:
         value: files
 
 databases:
-  - name: ahadi-db
-    databaseName: ahadi
-    user: ahadi_user
-    plan: starter
-    region: oregon
+  - name: ${APP_NAME}-db
+    databaseName: ${DATABASE_NAME}
+    user: ${DB_USER}
+    plan: ${DB_PLAN}
+    region: ${REGION}
+    postgresMajorVersion: ${POSTGRES_VERSION}
