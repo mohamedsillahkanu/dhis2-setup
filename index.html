@@ -87,12 +87,6 @@
             color: #ef4444;
         }
 
-        .form-label .optional {
-            color: #94a3b8;
-            font-size: 0.85rem;
-            font-weight: 400;
-        }
-
         .form-input, .form-select {
             width: 100%;
             padding: 14px 18px;
@@ -203,11 +197,6 @@
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
             font-weight: 700;
-        }
-
-        .preview-value.placeholder {
-            color: #64748b;
-            font-style: italic;
         }
 
         .btn {
@@ -418,7 +407,7 @@
         <div class="header">
             <div class="header-icon">⚕️</div>
             <h1>DHIS2 Deploy</h1>
-            <p>Configure & Deploy Your Health Information System</p>
+            <p>One-Click Health Information System</p>
         </div>
 
         <div id="step-input" class="card">
@@ -464,17 +453,6 @@
                 <select id="db-plan" class="form-select">
                     <option value="starter">Starter - $7/month (512MB RAM)</option>
                     <option value="standard">Standard - $15/month (1GB RAM)</option>
-                    <option value="standard-ha">Standard HA - $50/month (High Availability)</option>
-                </select>
-                <div class="form-help">Choose based on expected data volume</div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">PostgreSQL Version <span class="required">*</span></label>
-                <select id="postgres-version" class="form-select">
-                    <option value="15" selected>PostgreSQL 15 (Recommended)</option>
-                    <option value="16">PostgreSQL 16 (Latest)</option>
-                    <option value="14">PostgreSQL 14</option>
                 </select>
             </div>
 
@@ -485,9 +463,7 @@
                 <select id="service-plan" class="form-select">
                     <option value="starter">Starter - $7/month (512MB RAM, 0.5 CPU)</option>
                     <option value="standard" selected>Standard - $25/month (2GB RAM, 1 CPU)</option>
-                    <option value="standard-plus">Standard Plus - $85/month (4GB RAM, 2 CPU)</option>
                 </select>
-                <div class="form-help">DHIS2 requires at least Standard plan for production</div>
             </div>
 
             <div class="form-group">
@@ -496,21 +472,11 @@
                     <option value="oregon" selected>Oregon, USA</option>
                     <option value="frankfurt">Frankfurt, Germany</option>
                     <option value="singapore">Singapore</option>
-                    <option value="ohio">Ohio, USA</option>
                 </select>
-                <div class="form-help">Choose closest region for best performance</div>
-            </div>
-
-            <div class="section-title">🔐 Security Settings</div>
-
-            <div class="form-group">
-                <label class="form-label">Encryption Password <span class="optional">(optional - auto-generated if empty)</span></label>
-                <input type="text" id="encryption-password" class="form-input" placeholder="Leave empty for auto-generation">
-                <div class="form-help">Used for encrypting sensitive data in DHIS2</div>
             </div>
 
             <div class="info-note">
-                <p>💡 <strong>Tip:</strong> All configuration will be automatically injected into your DHIS2 instance. Default admin credentials are <strong>admin/district</strong> - change them after first login!</p>
+                <p>💡 <strong>Tip:</strong> All configuration will be automatically injected. Default login: <strong>admin/district</strong> - change after first login!</p>
             </div>
 
             <button class="btn btn-primary" onclick="deployInstance()" id="deploy-btn" disabled>🚀 Deploy DHIS2</button>
@@ -520,8 +486,8 @@
             <div class="deploying">
                 <div class="spinner"></div>
                 <h3>Deploying Your DHIS2...</h3>
-                <p id="deploy-status">Setting up database and application</p>
-                <p style="margin-top: 10px; font-size: 0.9rem;">This usually takes 10-15 minutes ☕</p>
+                <p id="deploy-status">Creating infrastructure...</p>
+                <p style="margin-top: 10px; font-size: 0.9rem;">This takes 10-15 minutes ☕</p>
             </div>
 
             <div class="url-preview">
@@ -532,7 +498,7 @@
             <div class="status-log" id="status-log"></div>
 
             <div class="info-note">
-                <p>🔄 Your instance is being created automatically<br>📦 Database provisioning<br>🐳 Docker container deployment<br>🔗 Connecting services<br>⚙️ Applying your configuration<br><br><strong>Please wait...</strong></p>
+                <p>🔄 Creating automatically<br>📦 Database provisioning<br>🐳 Docker deployment<br>🔗 Connecting services<br><br><strong>Please wait...</strong></p>
             </div>
         </div>
 
@@ -540,16 +506,16 @@
             <div class="success-message">
                 <div class="success-icon">🎉</div>
                 <h2>Deployed!</h2>
-                <p>Your DHIS2 instance is ready</p>
+                <p>Your DHIS2 is ready</p>
             </div>
 
             <div class="url-preview">
-                <div class="url-label">Access Your DHIS2 Here</div>
+                <div class="url-label">Access Your DHIS2</div>
                 <div class="url-text" id="success-url"></div>
             </div>
 
             <div class="credentials">
-                <h4>🔐 Default Login Credentials</h4>
+                <h4>🔐 Default Login</h4>
                 <div class="cred-item">
                     <span class="cred-label">Username</span>
                     <span class="cred-value">admin</span>
@@ -561,31 +527,27 @@
             </div>
 
             <div class="warning-note">
-                <h4>⚠️ Important Security Steps</h4>
-                <p><strong>1. Change your password immediately after login!</strong><br><strong>2. Create additional user accounts with appropriate roles</strong><br><strong>3. Review and configure security settings</strong><br>The default credentials are public and insecure.</p>
+                <h4>⚠️ Important</h4>
+                <p><strong>Change password immediately after login!</strong></p>
             </div>
 
             <button class="btn btn-success" onclick="openDhis2()" style="margin-bottom: 20px;">🚀 Open DHIS2</button>
-            <button class="btn btn-primary" onclick="window.location.reload()" style="background: rgba(100, 116, 139, 0.3);">← Deploy Another Instance</button>
+            <button class="btn btn-primary" onclick="window.location.reload()" style="background: rgba(100, 116, 139, 0.3);">← Deploy Another</button>
         </div>
     </div>
 
     <script>
-        // IMPORTANT: Replace with your actual backend proxy URL after deployment
-        const PROXY_URL = 'https://your-proxy-server.onrender.com';
-        const GITHUB_REPO = 'mohamedsillahkanu/dhis2-setup';
+        // ⚠️ REPLACE WITH YOUR GOOGLE APPS SCRIPT URL
+        const PROXY_URL = 'https://script.google.com/macros/s/AKfycby-tZ8GFdag_iQukeMM-v5SpvKqS13FxHQXXINkIHvyhl475NYkn_NoMcqZUTA_ROyH0A/exec';
 
         let config = {
             appName: '',
             appUrl: '',
             dbPlan: 'starter',
             servicePlan: 'standard',
-            region: 'oregon',
-            postgresVersion: '15',
-            encryptionPassword: ''
+            region: 'oregon'
         };
 
-        // ADD LOG FUNCTION - THIS WAS MISSING!
         function addLog(message) {
             const log = document.getElementById('status-log');
             if (log) {
@@ -595,7 +557,7 @@
                 log.appendChild(entry);
                 log.scrollTop = log.scrollHeight;
             }
-            console.log(message); // Also log to browser console
+            console.log(message);
         }
 
         function updateUrl() {
@@ -632,8 +594,6 @@
             config.dbPlan = document.getElementById('db-plan').value;
             config.servicePlan = document.getElementById('service-plan').value;
             config.region = document.getElementById('region').value;
-            config.postgresVersion = document.getElementById('postgres-version').value;
-            config.encryptionPassword = document.getElementById('encryption-password').value || generateSecurePassword();
         }
 
         async function deployInstance() {
@@ -641,86 +601,72 @@
                 alert('Please enter a valid app name');
                 return;
             }
-        
+
             collectConfig();
-        
+
             document.getElementById('deploying-url').textContent = config.appUrl;
             document.getElementById('step-input').classList.add('step-hidden');
             document.getElementById('step-deploying').classList.remove('step-hidden');
-        
+
             try {
-                addLog('Starting Blueprint deployment...');
-                document.getElementById('deploy-status').textContent = 'Creating infrastructure from Blueprint...';
-        
-                const response = await fetch(`${PROXY_URL}/api/deploy-blueprint`, {
+                addLog('Starting deployment via Google Apps Script...');
+                document.getElementById('deploy-status').textContent = 'Creating infrastructure...';
+
+                const response = await fetch(PROXY_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        action: 'deploy',
                         appName: config.appName,
                         dbPlan: config.dbPlan,
                         servicePlan: config.servicePlan,
-                        region: config.region,
-                        postgresVersion: config.postgresVersion
+                        region: config.region
                     })
                 });
-        
+
                 const result = await response.json();
-        
-                if (!response.ok || !result.success) {
-                    throw new Error(result.message || 'Blueprint deployment failed');
+
+                if (!result.success) {
+                    throw new Error(result.message || 'Deployment failed');
                 }
-        
-                addLog('✅ Blueprint created: ' + result.blueprintId);
-                if (result.serviceId) {
-                    addLog('✅ Service ID: ' + result.serviceId);
-                    config.serviceId = result.serviceId;
-                }
+
+                addLog('✅ Database created: ' + result.databaseId);
+                addLog('✅ Service created: ' + result.serviceId);
+                config.serviceId = result.serviceId;
                 config.appUrl = result.url;
-        
+
                 document.getElementById('deploying-url').textContent = config.appUrl;
-                document.getElementById('deploy-status').textContent = 'Building and deploying application...';
+                document.getElementById('deploy-status').textContent = 'Building and deploying...';
                 
-                addLog('Waiting for deployment to complete...');
-                
-                // Start polling for status
-                if (result.serviceId) {
-                    pollDeploymentStatus(result.serviceId);
-                } else {
-                    // If no service ID yet, wait and try to find it
-                    addLog('⚠️ Service ID not available yet, waiting...');
-                    setTimeout(() => {
-                        alert('Deployment initiated! Check your Render dashboard for status.');
-                        showSuccess();
-                    }, 5000);
-                }
-        
+                addLog('Monitoring deployment...');
+                pollDeploymentStatus(result.serviceId);
+
             } catch (error) {
                 console.error('Deployment error:', error);
                 addLog('❌ Error: ' + error.message);
-                alert(`Deployment failed: ${error.message}\n\nPlease check:\n- Your backend proxy is running at ${PROXY_URL}\n- render.yaml is in your GitHub repo\n- API key is valid in backend`);
+                alert(`Deployment failed: ${error.message}`);
                 
                 document.getElementById('step-deploying').classList.add('step-hidden');
                 document.getElementById('step-input').classList.remove('step-hidden');
             }
         }
 
-        function generateSecurePassword() {
-            const array = new Uint8Array(32);
-            crypto.getRandomValues(array);
-            return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
-        }
-
         async function pollDeploymentStatus(serviceId) {
             try {
-                addLog('⏳ Checking deployment status...');
+                addLog('⏳ Checking status...');
                 
-                const response = await fetch(`${PROXY_URL}/api/status/${serviceId}`);
-
-                if (!response.ok) {
-                    throw new Error('Failed to check deployment status');
-                }
+                const response = await fetch(PROXY_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'status',
+                        serviceId: serviceId
+                    })
+                });
 
                 const result = await response.json();
 
