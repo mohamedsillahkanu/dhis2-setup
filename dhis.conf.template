@@ -1,0 +1,16 @@
+# Database Configuration
+connection.dialect = org.hibernate.dialect.PostgreSQLDialect
+connection.driver_class = org.postgresql.Driver
+connection.url = ${DATABASE_URL}
+connection.username = ${DB_USERNAME}
+connection.password = ${DB_PASSWORD}
+
+# Server Configuration
+server.base.url = ${SERVER_URL}
+
+# File Storage
+filestore.provider = filesystem
+filestore.container = files
+
+# Security
+encryption.password = ${ENCRYPTION_PASSWORD}
