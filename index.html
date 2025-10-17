@@ -383,6 +383,23 @@
             font-size: 1.1rem;
         }
 
+        .status-log {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #22c55e;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .status-log div {
+            margin: 5px 0;
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2.2rem;
@@ -503,7 +520,7 @@
             <div class="deploying">
                 <div class="spinner"></div>
                 <h3>Deploying Your DHIS2...</h3>
-                <p>Setting up database and application</p>
+                <p id="deploy-status">Setting up database and application</p>
                 <p style="margin-top: 10px; font-size: 0.9rem;">This usually takes 10-15 minutes ☕</p>
             </div>
 
@@ -511,6 +528,8 @@
                 <div class="url-label">Your Instance URL</div>
                 <div class="url-text" id="deploying-url"></div>
             </div>
+
+            <div class="status-log" id="status-log"></div>
 
             <div class="info-note">
                 <p>🔄 Your instance is being created automatically<br>📦 Database provisioning<br>🐳 Docker container deployment<br>🔗 Connecting services<br>⚙️ Applying your configuration<br><br><strong>Please wait...</strong></p>
@@ -565,6 +584,19 @@
             postgresVersion: '15',
             encryptionPassword: ''
         };
+
+        // ADD LOG FUNCTION - THIS WAS MISSING!
+        function addLog(message) {
+            const log = document.getElementById('status-log');
+            if (log) {
+                const timestamp = new Date().toLocaleTimeString();
+                const entry = document.createElement('div');
+                entry.textContent = `[${timestamp}] ${message}`;
+                log.appendChild(entry);
+                log.scrollTop = log.scrollHeight;
+            }
+            console.log(message); // Also log to browser console
+        }
 
         function updateUrl() {
             const input = document.getElementById('app-name').value;
@@ -657,7 +689,7 @@
                     pollDeploymentStatus(result.serviceId);
                 } else {
                     // If no service ID yet, wait and try to find it
-                    addLog('Waiting for service to be created...');
+                    addLog('⚠️ Service ID not available yet, waiting...');
                     setTimeout(() => {
                         alert('Deployment initiated! Check your Render dashboard for status.');
                         showSuccess();
@@ -667,79 +699,11 @@
             } catch (error) {
                 console.error('Deployment error:', error);
                 addLog('❌ Error: ' + error.message);
-                alert(`Deployment failed: ${error.message}\n\nPlease check:\n- Your backend proxy is running\n- render.yaml is in your GitHub repo\n- API key is valid`);
+                alert(`Deployment failed: ${error.message}\n\nPlease check:\n- Your backend proxy is running at ${PROXY_URL}\n- render.yaml is in your GitHub repo\n- API key is valid in backend`);
                 
                 document.getElementById('step-deploying').classList.add('step-hidden');
                 document.getElementById('step-input').classList.remove('step-hidden');
             }
-        }
-
-        async function createDatabase() {
-            const dbName = config.appName.replace(/-/g, '_');
-            
-            const response = await fetch(`${PROXY_URL}/api/create-database`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: `${config.appName}-db`,
-                    databaseName: dbName,
-                    user: `${dbName}_user`,
-                    plan: config.dbPlan,
-                    region: config.region,
-                    postgresMajorVersion: config.postgresVersion
-                })
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(`Database creation failed: ${error.message || response.statusText}`);
-            }
-
-            const db = await response.json();
-            return db;
-        }
-
-        async function createWebService(database) {
-            const envVars = [
-                { key: 'DATABASE_URL', value: `jdbc:postgresql://${database.host}:5432/${database.databaseName}` },
-                { key: 'DB_HOST', value: database.host },
-                { key: 'DB_PORT', value: '5432' },
-                { key: 'DB_NAME', value: database.databaseName },
-                { key: 'DB_USERNAME', value: database.user },
-                { key: 'DB_PASSWORD', value: database.password },
-                { key: 'SERVER_URL', value: `https://${config.appName}.onrender.com` },
-                { key: 'ENCRYPTION_PASSWORD', value: config.encryptionPassword },
-                { key: 'FILESTORE_PROVIDER', value: 'filesystem' },
-                { key: 'FILESTORE_CONTAINER', value: 'files' }
-            ];
-
-            const response = await fetch(`${PROXY_URL}/api/create-service`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    type: 'web_service',
-                    name: config.appName,
-                    runtime: 'docker',
-                    repo: `https://github.com/${GITHUB_REPO}`,
-                    branch: 'main',
-                    dockerfilePath: './Dockerfile',
-                    plan: config.servicePlan,
-                    region: config.region,
-                    envVars: envVars,
-                    autoDeploy: true
-                })
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(`Web service creation failed: ${error.message || response.statusText}`);
-            }
-
-            return await response.json();
         }
 
         function generateSecurePassword() {
@@ -750,27 +714,29 @@
 
         async function pollDeploymentStatus(serviceId) {
             try {
-                const response = await fetch(`${PROXY_URL}/api/service-status/${serviceId}`);
+                addLog('⏳ Checking deployment status...');
+                
+                const response = await fetch(`${PROXY_URL}/api/status/${serviceId}`);
 
                 if (!response.ok) {
                     throw new Error('Failed to check deployment status');
                 }
 
-                const service = await response.json();
+                const result = await response.json();
 
-                if (service.serviceDetails && service.serviceDetails.url) {
-                    config.appUrl = service.serviceDetails.url;
-                    
-                    if (service.suspended === false) {
-                        showSuccess();
-                        return;
-                    }
+                if (result.success && result.status === 'live') {
+                    addLog('✅ Deployment complete!');
+                    config.appUrl = result.url;
+                    showSuccess();
+                    return;
                 }
                 
+                addLog('⏳ Still deploying... checking again in 30 seconds');
                 setTimeout(() => pollDeploymentStatus(serviceId), 30000);
                 
             } catch (error) {
                 console.error('Status check error:', error);
+                addLog('⚠️ Status check failed, retrying...');
                 setTimeout(() => pollDeploymentStatus(serviceId), 30000);
             }
         }
