@@ -1,33 +1,47 @@
-databases:
-  - name: icf
-    databaseName: icf
-    user: icf_user
-    plan: Basic-2gb
-    diskSizeGB: 10
-    region: oregon
-    postgresMajorVersion: 15
-
 services:
   - type: web
-    name: icf
+    name: ${APP_NAME}
     runtime: docker
-    plan: standard
-    region: oregon
     dockerfilePath: ./Dockerfile
+    plan: ${SERVICE_PLAN}
+    region: ${REGION}
+    autoDeploy: true
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: icf
+          name: ${APP_NAME}-db
           property: connectionString
+      - key: DB_HOST
+        fromDatabase:
+          name: ${APP_NAME}-db
+          property: host
+      - key: DB_PORT
+        value: 5432
+      - key: DB_NAME
+        fromDatabase:
+          name: ${APP_NAME}-db
+          property: databaseName
       - key: DB_USERNAME
         fromDatabase:
-          name: icf
+          name: ${APP_NAME}-db
           property: user
       - key: DB_PASSWORD
         fromDatabase:
-          name: icf
+          name: ${APP_NAME}-db
           property: password
       - key: SERVER_URL
-        value: https://icf.onrender.com
+        value: https://${APP_NAME}.onrender.com
       - key: ENCRYPTION_PASSWORD
         generateValue: true
+      - key: FILESTORE_PROVIDER
+        value: filesystem
+      - key: FILESTORE_CONTAINER
+        value: files
+
+databases:
+  - name: ${APP_NAME}-db
+    databaseName: ${DATABASE_NAME}
+    user: ${DB_USER}
+    plan: ${DB_PLAN}
+    region: ${REGION}
+    postgresMajorVersion: ${POSTGRES_VERSION}
