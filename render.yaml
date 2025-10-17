@@ -1,36 +1,36 @@
 services:
   - type: web
-    name: ${APP_NAME}
+    name: ${SERVICE_NAME}
     runtime: docker
     dockerfilePath: ./Dockerfile
-    plan: ${SERVICE_PLAN}
-    region: ${REGION}
+    plan: standard
+    region: oregon
     autoDeploy: true
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: ${APP_NAME}-db
+          name: ${SERVICE_NAME}-db
           property: connectionString
       - key: DB_HOST
         fromDatabase:
-          name: ${APP_NAME}-db
+          name: ${SERVICE_NAME}-db
           property: host
       - key: DB_PORT
-        value: 5432
+        value: "5432"
       - key: DB_NAME
         fromDatabase:
-          name: ${APP_NAME}-db
+          name: ${SERVICE_NAME}-db
           property: databaseName
       - key: DB_USERNAME
         fromDatabase:
-          name: ${APP_NAME}-db
+          name: ${SERVICE_NAME}-db
           property: user
       - key: DB_PASSWORD
         fromDatabase:
-          name: ${APP_NAME}-db
+          name: ${SERVICE_NAME}-db
           property: password
       - key: SERVER_URL
-        value: https://${APP_NAME}.onrender.com
+        value: https://${SERVICE_NAME}.onrender.com
       - key: ENCRYPTION_PASSWORD
         generateValue: true
       - key: FILESTORE_PROVIDER
@@ -39,9 +39,9 @@ services:
         value: files
 
 databases:
-  - name: ${APP_NAME}-db
+  - name: ${SERVICE_NAME}-db
     databaseName: ${DATABASE_NAME}
     user: ${DB_USER}
-    plan: ${DB_PLAN}
-    region: ${REGION}
-    postgresMajorVersion: ${POSTGRES_VERSION}
+    plan: starter
+    region: oregon
+    postgresMajorVersion: "15"
