@@ -552,9 +552,9 @@
     </div>
 
     <script>
-        const RENDER_API_KEY = 'rnd_TVWH0kcDZ28crIgn2M3Ew9taAblF';
+        // IMPORTANT: Replace with your actual backend proxy URL after deployment
+        const PROXY_URL = 'https://your-proxy-server.onrender.com';
         const GITHUB_REPO = 'mohamedsillahkanu/dhis2-setup';
-        const RENDER_API_URL = 'https://api.render.com/v1';
 
         let config = {
             appName: '',
@@ -577,12 +577,10 @@
                 config.appName = cleanName;
                 config.appUrl = `https://${cleanName}.onrender.com`;
                 
-                // Update URL
                 urlElement.textContent = config.appUrl;
                 urlElement.classList.remove('placeholder');
                 deployBtn.disabled = false;
 
-                // Update resource preview
                 const dbName = cleanName.replace(/-/g, '_');
                 document.getElementById('preview-service').textContent = cleanName;
                 document.getElementById('preview-db-name').textContent = `${cleanName}-db`;
@@ -640,7 +638,7 @@
 
             } catch (error) {
                 console.error('Deployment error:', error);
-                alert(`Deployment failed: ${error.message}\n\nPlease check:\n- Your Render API key is valid\n- GitHub repo is accessible\n- You have available resources on Render`);
+                alert(`Deployment failed: ${error.message}\n\nPlease check:\n- Your backend proxy is running at ${PROXY_URL}\n- API key is valid in backend\n- GitHub repo is accessible`);
                 
                 document.getElementById('step-deploying').classList.add('step-hidden');
                 document.getElementById('step-input').classList.remove('step-hidden');
@@ -650,10 +648,9 @@
         async function createDatabase() {
             const dbName = config.appName.replace(/-/g, '_');
             
-            const response = await fetch(`${RENDER_API_URL}/postgres`, {
+            const response = await fetch(`${PROXY_URL}/api/create-database`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${RENDER_API_KEY}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -689,10 +686,9 @@
                 { key: 'FILESTORE_CONTAINER', value: 'files' }
             ];
 
-            const response = await fetch(`${RENDER_API_URL}/services`, {
+            const response = await fetch(`${PROXY_URL}/api/create-service`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${RENDER_API_KEY}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -725,9 +721,7 @@
 
         async function pollDeploymentStatus(serviceId) {
             try {
-                const response = await fetch(`${RENDER_API_URL}/services/${serviceId}`, {
-                    headers: { 'Authorization': `Bearer ${RENDER_API_KEY}` }
-                });
+                const response = await fetch(`${PROXY_URL}/api/service-status/${serviceId}`);
 
                 if (!response.ok) {
                     throw new Error('Failed to check deployment status');
