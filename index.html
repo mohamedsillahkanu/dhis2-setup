@@ -164,6 +164,52 @@
             font-style: italic;
         }
 
+        .preview-box {
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid rgba(100, 116, 139, 0.4);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .preview-title {
+            color: #fbbf24;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .preview-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            margin: 8px 0;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+        }
+
+        .preview-label {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .preview-value {
+            color: #22c55e;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .preview-value.placeholder {
+            color: #64748b;
+            font-style: italic;
+        }
+
         .btn {
             padding: 18px 28px;
             font-size: 1.1rem;
@@ -374,6 +420,26 @@
                 <div class="url-text placeholder" id="app-url">waiting for app name...</div>
             </div>
 
+            <div class="preview-box" id="resource-preview" style="display: none;">
+                <div class="preview-title">📋 Resources to be Created</div>
+                <div class="preview-item">
+                    <span class="preview-label">Service Name:</span>
+                    <span class="preview-value" id="preview-service">-</span>
+                </div>
+                <div class="preview-item">
+                    <span class="preview-label">Database Name:</span>
+                    <span class="preview-value" id="preview-db-name">-</span>
+                </div>
+                <div class="preview-item">
+                    <span class="preview-label">Database Schema:</span>
+                    <span class="preview-value" id="preview-db-schema">-</span>
+                </div>
+                <div class="preview-item">
+                    <span class="preview-label">Database User:</span>
+                    <span class="preview-value" id="preview-db-user">-</span>
+                </div>
+            </div>
+
             <div class="section-title">🗄️ Database Configuration</div>
 
             <div class="form-group">
@@ -505,17 +571,30 @@
             const cleanName = input.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/^-+|-+$/g, '');
             const urlElement = document.getElementById('app-url');
             const deployBtn = document.getElementById('deploy-btn');
+            const resourcePreview = document.getElementById('resource-preview');
 
             if (cleanName && cleanName.length >= 3) {
                 config.appName = cleanName;
                 config.appUrl = `https://${cleanName}.onrender.com`;
+                
+                // Update URL
                 urlElement.textContent = config.appUrl;
                 urlElement.classList.remove('placeholder');
                 deployBtn.disabled = false;
+
+                // Update resource preview
+                const dbName = cleanName.replace(/-/g, '_');
+                document.getElementById('preview-service').textContent = cleanName;
+                document.getElementById('preview-db-name').textContent = `${cleanName}-db`;
+                document.getElementById('preview-db-schema').textContent = dbName;
+                document.getElementById('preview-db-user').textContent = `${dbName}_user`;
+                
+                resourcePreview.style.display = 'block';
             } else {
                 urlElement.textContent = 'waiting for app name...';
                 urlElement.classList.add('placeholder');
                 deployBtn.disabled = true;
+                resourcePreview.style.display = 'none';
             }
         }
 
