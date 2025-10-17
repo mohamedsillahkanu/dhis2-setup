@@ -484,7 +484,7 @@
 
             try {
                 // Call your backend API
-                const response = await fetch('YOUR_BACKEND_API_URL/deploy', {
+                const response = await fetch('rnd_TVWH0kcDZ28crIgn2M3Ew9taAblF/deploy', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -518,12 +518,12 @@
                 document.getElementById('step-deploying').classList.add('step-hidden');
                 document.getElementById('step-input').classList.remove('step-hidden');
             }
-        }
+        }  
 
         // Poll deployment status
         async function pollDeploymentStatus(deploymentId) {
             try {
-                const response = await fetch(`YOUR_BACKEND_API_URL/deploy/status/${deploymentId}`);
+                const response = await fetch(`rnd_TVWH0kcDZ28crIgn2M3Ew9taAblF/deploy/status/${deploymentId}`);
                 const result = await response.json();
 
                 if (result.status === 'completed') {
