@@ -23,7 +23,7 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 800px;
             width: 100%;
         }
 
@@ -65,6 +65,29 @@
             border-radius: 24px;
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+
+        .step-title {
+            font-size: 1.4rem;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
         }
 
         .form-group {
@@ -77,10 +100,6 @@
             font-weight: 600;
             color: #e2e8f0;
             font-size: 0.95rem;
-        }
-
-        .form-label .required {
-            color: #ef4444;
         }
 
         .form-input {
@@ -104,57 +123,35 @@
             color: #64748b;
         }
 
-        .form-help {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            margin-top: 6px;
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            color: #667eea;
-            margin: 30px 0 20px 0;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
-            font-weight: 700;
-        }
-
-        .section-title:first-child {
-            margin-top: 0;
-        }
-
-        .url-preview {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
-            border: 2px solid rgba(34, 197, 94, 0.4);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            margin: 25px 0;
-        }
-
-        .url-label {
-            color: #94a3b8;
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        .url-text {
-            font-size: 1.2rem;
-            color: #3b82f6;
-            font-weight: 700;
-            word-break: break-all;
+        .copy-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(100, 116, 139, 0.4);
+            border-radius: 10px;
+            padding: 15px;
             font-family: 'Courier New', monospace;
+            color: #22c55e;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .url-text.placeholder {
-            color: #64748b;
-            font-style: italic;
+        .copy-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .btn {
+        .copy-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
             padding: 18px 28px;
             font-size: 1.1rem;
             font-weight: 700;
@@ -169,15 +166,13 @@
             width: 100%;
             text-transform: uppercase;
             letter-spacing: 1px;
-        }
-
-        .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            text-decoration: none;
         }
 
-        .btn-primary:hover:not(:disabled) {
+        .btn-primary:hover {
             transform: translateY(-3px);
             box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
         }
@@ -186,17 +181,6 @@
             opacity: 0.4;
             cursor: not-allowed;
             transform: none;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
-            color: white;
-            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.3);
-        }
-
-        .btn-success:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(34, 197, 94, 0.5);
         }
 
         .info-note {
@@ -218,37 +202,36 @@
             border: 2px solid rgba(234, 179, 8, 0.4);
             border-radius: 12px;
             padding: 20px;
-            margin: 25px 0;
+            margin: 20px 0;
         }
 
         .warning-note h4 {
             color: #fbbf24;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
+            margin-bottom: 10px;
         }
 
-        .warning-note p {
+        .success-check {
+            color: #22c55e;
+            font-size: 1.2rem;
+            margin-right: 8px;
+        }
+
+        .step-hidden {
+            display: none;
+        }
+
+        ol {
+            padding-left: 20px;
             color: #cbd5e1;
-            line-height: 1.8;
         }
 
-        .deploy-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(102, 126, 234, 0.1);
-            border: 2px solid rgba(102, 126, 234, 0.3);
-            border-radius: 12px;
-            color: #3b82f6;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
+        ol li {
+            margin-bottom: 12px;
+            line-height: 1.6;
         }
 
-        .deploy-link:hover {
-            background: rgba(102, 126, 234, 0.2);
-            transform: translateY(-2px);
+        strong {
+            color: #22c55e;
         }
     </style>
 </head>
@@ -257,95 +240,150 @@
         <div class="header">
             <div class="header-icon">⚕️</div>
             <h1>DHIS2 Deploy</h1>
-            <p>One-Click Health Information System</p>
+            <p>3-Step Deployment Process</p>
         </div>
 
-        <div class="card">
-            <div class="section-title">🏥 Application Name</div>
+        <!-- Step 1 -->
+        <div class="card" id="step1">
+            <div class="step-title">
+                <span class="step-number">1</span>
+                Enter Your App Name
+            </div>
             
             <div class="form-group">
-                <label class="form-label">
-                    Enter Your Application Name <span class="required">*</span>
-                </label>
+                <label class="form-label">Application Name</label>
                 <input 
                     type="text" 
                     id="app-name" 
                     class="form-input" 
-                    placeholder="my-health-system" 
-                    oninput="updateUrl()"
-                    required
+                    placeholder="my-health-clinic" 
+                    oninput="updateNames()"
                 >
-                <div class="form-help">Lowercase letters, numbers, and hyphens only</div>
-            </div>
-
-            <div class="url-preview">
-                <div class="url-label">Your DHIS2 URL</div>
-                <div class="url-text placeholder" id="app-url">waiting for app name...</div>
             </div>
 
             <div class="info-note">
-                <p>
-                    💡 <strong>How it works:</strong><br>
-                    1. Enter your app name above<br>
-                    2. Click "Deploy to Render" button below<br>
-                    3. Render will automatically create your database and web service<br>
-                    4. Wait 10-15 minutes for deployment<br>
-                    5. Access your DHIS2 at the URL shown above
-                </p>
+                <p>Use lowercase letters, numbers, and hyphens only (e.g., <strong>hospital-nairobi</strong>)</p>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="card step-hidden" id="step2">
+            <div class="step-title">
+                <span class="step-number">2</span>
+                Deploy on Render
+            </div>
+
+            <div class="info-note">
+                <p>Click the button below to deploy to Render. You'll need to:</p>
+                <ol>
+                    <li>Click "Apply" on the Render page</li>
+                    <li>Wait for the deployment to complete (10-15 minutes)</li>
+                    <li>Come back here for the next step</li>
+                </ol>
             </div>
 
             <a 
-                href="#" 
-                id="deploy-link" 
-                class="deploy-link" 
-                style="pointer-events: none; opacity: 0.5;"
+                href="https://dashboard.render.com/select-repo?type=blueprint&repo=https://github.com/mohamedsillahkanu/dhis2-setup"
                 target="_blank"
+                class="btn-primary"
             >
                 🚀 Deploy to Render
             </a>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="card step-hidden" id="step3">
+            <div class="step-title">
+                <span class="step-number">3</span>
+                Configure Service Names
+            </div>
 
             <div class="warning-note">
-                <h4>📝 After Deployment</h4>
+                <h4>⚠️ Important: Update Service Names on Render</h4>
+                <p>After clicking "Apply" on Render, you need to manually update the service names:</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Web Service Name (copy this):</label>
+                <div class="copy-box">
+                    <span id="service-name-display">-</span>
+                    <button class="copy-btn" onclick="copyText('service-name')">Copy</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Database Name (copy this):</label>
+                <div class="copy-box">
+                    <span id="db-name-display">-</span>
+                    <button class="copy-btn" onclick="copyText('db-name')">Copy</button>
+                </div>
+            </div>
+
+            <div class="info-note">
+                <p><strong>On the Render page:</strong></p>
+                <ol>
+                    <li>Find the <strong>web service</strong> field and paste: <span id="service-name-text" style="color: #22c55e;">-</span></li>
+                    <li>Find the <strong>database name</strong> field and paste: <span id="db-name-text" style="color: #22c55e;">-</span></li>
+                    <li>Set <strong>SERVER_URL</strong> to: <span id="server-url-text" style="color: #22c55e;">-</span></li>
+                    <li>Click <strong>"Apply"</strong> to start deployment</li>
+                </ol>
+            </div>
+
+            <div class="warning-note">
+                <h4>✅ After Deployment</h4>
                 <p>
-                    <strong>Default Login:</strong> admin / district<br>
-                    <strong>⚠️ IMPORTANT:</strong> Change your password immediately after first login!
+                    Your DHIS2 will be available at: <strong id="final-url">-</strong><br>
+                    Default login: <strong>admin</strong> / <strong>district</strong><br>
+                    <span style="color: #ef4444;">⚠️ Change password immediately after login!</span>
                 </p>
             </div>
         </div>
     </div>
 
     <script>
-        const GITHUB_REPO = 'mohamedsillahkanu/dhis2-setup';
-        const RENDER_DEPLOY_BASE = 'https://dashboard.render.com/select-repo?type=blueprint';
+        let appName = '';
+        let serviceName = '';
+        let dbName = '';
+        let serverUrl = '';
 
-        function updateUrl() {
+        function updateNames() {
             const input = document.getElementById('app-name').value;
             const cleanName = input.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/^-+|-+$/g, '');
-            const urlElement = document.getElementById('app-url');
-            const deployLink = document.getElementById('deploy-link');
 
             if (cleanName && cleanName.length >= 3) {
-                const appUrl = `https://${cleanName}.onrender.com`;
-                urlElement.textContent = appUrl;
-                urlElement.classList.remove('placeholder');
+                appName = cleanName;
+                serviceName = cleanName;
+                dbName = `${cleanName}-db`;
+                serverUrl = `https://${cleanName}.onrender.com`;
 
-                // Create deploy link with environment variables
-                const dbName = cleanName.replace(/-/g, '_');
-                const deployUrl = `${RENDER_DEPLOY_BASE}&repo=https://github.com/${GITHUB_REPO}` +
-                    `&envVars[SERVICE_NAME]=${cleanName}` +
-                    `&envVars[DATABASE_NAME]=${dbName}` +
-                    `&envVars[DB_USER]=${dbName}_user`;
+                // Update displays
+                document.getElementById('service-name-display').textContent = serviceName;
+                document.getElementById('db-name-display').textContent = dbName;
+                document.getElementById('service-name-text').textContent = serviceName;
+                document.getElementById('db-name-text').textContent = dbName;
+                document.getElementById('server-url-text').textContent = serverUrl;
+                document.getElementById('final-url').textContent = serverUrl;
 
-                deployLink.href = deployUrl;
-                deployLink.style.pointerEvents = 'auto';
-                deployLink.style.opacity = '1';
+                // Show steps
+                document.getElementById('step2').classList.remove('step-hidden');
+                document.getElementById('step3').classList.remove('step-hidden');
             } else {
-                urlElement.textContent = 'waiting for app name...';
-                urlElement.classList.add('placeholder');
-                deployLink.style.pointerEvents = 'none';
-                deployLink.style.opacity = '0.5';
-                deployLink.href = '#';
+                document.getElementById('step2').classList.add('step-hidden');
+                document.getElementById('step3').classList.add('step-hidden');
             }
+        }
+
+        function copyText(type) {
+            let text = '';
+            if (type === 'service-name') {
+                text = serviceName;
+            } else if (type === 'db-name') {
+                text = dbName;
+            }
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert(`✅ Copied: ${text}`);
+            });
         }
     </script>
 </body>
