@@ -5,12 +5,31 @@ connection.url = ${DATABASE_URL}
 connection.username = ${DB_USERNAME}
 connection.password = ${DB_PASSWORD}
 
+# Connection Pool Settings
+connection.pool.max_size = 40
+connection.pool.min_size = 5
+connection.pool.timeout = 30000
+connection.pool.max_statements = 100
+
 # Server Configuration
 server.base.url = ${SERVER_URL}
+server.https = on
 
-# File Storage
-filestore.provider = filesystem
-filestore.container = files
+# File Storage Configuration
+filestore.provider = ${FILESTORE_PROVIDER}
+filestore.container = ${FILESTORE_CONTAINER}
 
-# Security
+# Security Settings
 encryption.password = ${ENCRYPTION_PASSWORD}
+
+# Analytics Settings
+analytics.cache.expiration = 3600
+
+# Audit Settings
+audit.enabled = on
+audit.database = on
+
+# Cluster Configuration
+cluster.hostname = ${SERVER_URL}
+cluster.cache.port = 4001
+cluster.cache.remote.object.port = 4002
