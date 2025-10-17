@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: ${SERVICE_NAME}
+    name: ahadi
     runtime: docker
     dockerfilePath: ./Dockerfile
     plan: standard
@@ -9,28 +9,28 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: ${SERVICE_NAME}-db
+          name: ahadi-db
           property: connectionString
       - key: DB_HOST
         fromDatabase:
-          name: ${SERVICE_NAME}-db
+          name: ahadi-db
           property: host
       - key: DB_PORT
         value: "5432"
       - key: DB_NAME
         fromDatabase:
-          name: ${SERVICE_NAME}-db
+          name: ahadi-db
           property: databaseName
       - key: DB_USERNAME
         fromDatabase:
-          name: ${SERVICE_NAME}-db
+          name: ahadi-db
           property: user
       - key: DB_PASSWORD
         fromDatabase:
-          name: ${SERVICE_NAME}-db
+          name: ahadi-db
           property: password
       - key: SERVER_URL
-        value: https://${SERVICE_NAME}.onrender.com
+        value: https://ahadi.onrender.com
       - key: ENCRYPTION_PASSWORD
         generateValue: true
       - key: FILESTORE_PROVIDER
@@ -39,8 +39,8 @@ services:
         value: files
 
 databases:
-  - name: ${SERVICE_NAME}-db
-    databaseName: ${DATABASE_NAME}
-    user: ${DB_USER}
+  - name: ahadi-db
+    databaseName: ahadi
+    user: ahadi_user
     plan: starter
     region: oregon
